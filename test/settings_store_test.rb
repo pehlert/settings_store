@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class SettingsStoreTest < ActiveSupport::TestCase
+  Fixtures.create_fixtures(File.dirname(__FILE__) + '/fixtures', :settings)
+  
   context "The settings store" do
     
     should "return existing configuration options" do

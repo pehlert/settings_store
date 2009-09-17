@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  key: string_example
+  value: "--- foo\n"
+
+two:
+  key: float_example
+  value: "--- 12345.67\n"
