@@ -1,13 +1,37 @@
 SettingsStore
 =============
 
-Introduction goes here.
+SettingsStore is a simple Rails plugin that allows to store global configuration settings 
+in your database, using an ActiveRecord model.
+
+It is designed to provide convenient access to your settings and stores any type of 
+data using AR's build-in YAML serialization.
+
+For better performance, a basic instance variable cache is implemented as well.
+
+Installation
+============
+
+Run from your project's root:
+./script/plugin install git://github.com/odadata/settings_store.git
+
+Please be aware that Rails 2.3.x currently has a bug that prevents the plugin's install from running,
+which is why you need to copy the migration from assets/create_settings_store.rb manually to db/migrate.
+Don't forget to add a timestamp as well, so that your copy command will look like this:
+cp assets/create_settings_store.rb ../../../db/migrate/20090918220100_create_settings_store.rb
 
 
 Example
 =======
 
-Example goes here.
+Configuration options can be stored and received using the method call notation on the Settings model:
 
+Settings.my_conf_option = 'some string'
+Settings.my_conf_option
 
-Copyright (c) 2009 [name of plugin creator], released under the MIT license
+Be aware that by default if you try to receive an option that can not be found in the database,
+a Setting::SettingNotFound exception is raised.
+If you prefer to disable this behavior, set Setting.raise_exception to false from one of your initializers.
+This will make Setting return nil for unknown options.
+
+Copyright (c) 2009 Pascal Ehlert, released under the MIT license
