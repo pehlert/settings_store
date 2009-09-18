@@ -1,16 +1,13 @@
 class Setting < ActiveRecord::Base
   class SettingNotFound < RuntimeError; end
   
+  # Set this to false if you want Setting to return nil instead of raising an error
+  # when a setting can not be found
+  cattr_accessor :raise_exception
+  self.raise_exception = true
+  
+  serialize :value
   @memory = {}
-  
-  def value
-    YAML::load(read_attribute(:value))
-  end
-  
-  def value=(new_value)
-    write_attribute(:value, new_value.to_yaml)
-  end
-  
   
   class << self
     def method_missing(method, *args)
@@ -31,8 +28,10 @@ class Setting < ActiveRecord::Base
 
       if r = find_by_key(key)
         @memory[key] = r.value
-      else
+      elsif self.raise_exception
         raise SettingNotFound, "The setting '#{key}' could not be found"
+      else
+        nil
       end
     end
 

@@ -16,7 +16,13 @@ class SettingsStoreTest < ActiveSupport::TestCase
     end
     
     should "raise SettingNotFound if a setting is not present" do
-      assert_raise(Setting::SettingNotFound) { Configuration.invalid }
+      assert_raise(Setting::SettingNotFound) { Setting.invalid }
+    end
+    
+    should "return nil if raise_exception is disabled and a setting is not present" do
+      Setting.raise_exception = false
+      assert_nothing_raised { Setting.invalid }
+      assert_nil Setting.invalid
     end
     
     should "store new configuration options" do 
