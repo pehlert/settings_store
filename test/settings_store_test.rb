@@ -1,5 +1,20 @@
 require 'test_helper'
 
+# Provides memcache emulation using a simple instance variable
+class MemcacheClientMock
+  def initialize
+    @memory = Hash.new
+  end
+  
+  def get(key)
+    @memory[key]
+  end
+  
+  def put(key, value)
+    @memory[key] = value
+  end
+end
+
 class SettingsStoreTest < ActiveSupport::TestCase
   Fixtures.create_fixtures(File.dirname(__FILE__) + '/fixtures', :settings)
   
@@ -35,5 +50,12 @@ class SettingsStoreTest < ActiveSupport::TestCase
       Setting.complex = object
       assert_equal object, Setting.complex
     end
+    
+    should "accept different cache client object via ss_cache" do
+      OTHER_CACHE = MemcacheClientMock.new
+      Setting.ss_cache = OTHER_CACHE
+      Setting.cached = 123
+      assert_not_nil OTHER_CACHE.get('_settings_store/cached')
+    end      
   end
 end
