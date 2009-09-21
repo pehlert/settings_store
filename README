@@ -37,14 +37,8 @@ This will make Setting return nil for unknown options.
 Caching
 =======
 
-The SettingsStore plugin tries to use caching by default to minimize database load.
-All you need is a cache backend, that supports #get and #put in the way memcache-client does.
-I strongly recommend to use memcache itself however.
-
-SettingsStore will look for a CACHE constant by default that you can set in one of your initializers,
-but it's also possible to configure another cache using Settings.ss_cache.
-If you don't like caching at all, just set it to nil.
-
+The SettingsStore plugin uses ActiveSupport's cache backend (available through Rails.cache) to improve performance.
+I recommend using memcached as a backend there for best results.
 All settings are stored with a '_settings_store/' prefix to avoid conflicts with your existing cache keys.
 
 
